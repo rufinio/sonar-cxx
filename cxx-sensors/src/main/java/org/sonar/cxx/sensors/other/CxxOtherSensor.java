@@ -131,10 +131,10 @@ public class CxxOtherSensor extends CxxReportSensor {
       String stylesheet = resolveFilename(baseDir.getAbsolutePath(), context.settings().getString(stylesheetKey));
 
 
-      List<File> inputs = getReports(context.config(), baseDir, inputKey);
+      List<File> inputs = getReports(context.settings(), baseDir, inputKey);
       String[] outputStrings = null;
       if (outputKey != null) {
-        outputStrings = context.config().getStringArray(outputKey);
+        outputStrings = context.settings().getStringArray(outputKey);
       }
       List<String> outputs = Arrays.asList((outputStrings != null) ? outputStrings : new String[] {});
 
