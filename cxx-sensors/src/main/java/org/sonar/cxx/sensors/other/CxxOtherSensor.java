@@ -57,7 +57,8 @@ public class CxxOtherSensor extends CxxReportSensor {
   public static final String OUTPUT_KEY = ".outputs";
 
   /**
-   * {@inheritDoc}
+   * CxxOtherSensor for Other Sensor 
+   * @param language defines settings C or C++
    */
   public CxxOtherSensor(CxxLanguage language) {
     super(language);
@@ -130,11 +131,14 @@ public class CxxOtherSensor extends CxxReportSensor {
       String stylesheet = resolveFilename(baseDir.getAbsolutePath(), context.settings().getString(stylesheetKey));
 
 
-      List<File> inputs = getReports(context.settings(), baseDir, inputKey);
-      String[] outputStrings = context.settings().getStringArray(outputKey);
+      List<File> inputs = getReports(context.config(), baseDir, inputKey);
+      String[] outputStrings = null;
+      if (outputKey != null) {
+        outputStrings = context.config().getStringArray(outputKey);
+      }
       List<String> outputs = Arrays.asList((outputStrings != null) ? outputStrings : new String[] {});
 
-      if (stylesheet == null && inputKey==null && outputKey==null) {
+      if ((stylesheet == null) && (inputs.isEmpty()) && (outputs.isEmpty())) {
         goOn = false;
       } else {
         if (stylesheet == null) {
@@ -160,7 +164,7 @@ public class CxxOtherSensor extends CxxReportSensor {
   private static boolean checkInput(String inputKey, String outputKey, @Nullable List<File> inputs,
                                                                 @Nullable List<String> outputs) {
     return isValidInput(inputKey, inputs) && isValidOutput(outputKey, outputs) && hasCorrectSize(inputs, outputs);
-  }
+      }
 
   /**
    * @param inputs
@@ -171,7 +175,7 @@ public class CxxOtherSensor extends CxxReportSensor {
     if (inputs.size() != outputs.size()) {
       LOG.error("Number of source XML files is not equal to the the number of output files.");
       return false;
-    } 
+      }
     return true;
   }
 
@@ -205,7 +209,8 @@ public class CxxOtherSensor extends CxxReportSensor {
         LOG.error(" inputKey is not defined.");
       }
       return false;
-      }
+    } 
+
     return true;
   }
 
@@ -226,3 +231,4 @@ public class CxxOtherSensor extends CxxReportSensor {
     }
   }
 }
+
